@@ -31,6 +31,9 @@ THEN
     send WhatsApp notification via Twilio
 ```
 
+## Architecture diagram
+<img src="images/diagram.jpg" alt="diagram"/>
+
 ## Project Tasks (Execution Order)
 
 ### 1. Define Requirements
