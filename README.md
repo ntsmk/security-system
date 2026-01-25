@@ -36,13 +36,13 @@ THEN
 
 ## Project Tasks (Execution Order)
 
-### 1. Define Requirements
+### 1. Define Requirements -> Done
 - Identify hardware and software requirements
 - Research compatible components
 - Purchase required hardware
 - Test individual hardware components
 
-### 2. Development
+### 2. Development -> In progress
 - Implement sensor input handling
 - Integrate camera capture
 - Integrate WhatsApp notifications using Twilio
