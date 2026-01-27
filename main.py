@@ -20,7 +20,8 @@ tw_from_number = os.getenv("from_number")
 tw_to_number = os.getenv("to_number")
 twilio = Client(tw_account_id, tw_auth_token)
 
-images_dir = Path("/home/nkosaka/security_project/images")
+PROJECT_ROOT = Path(__file__).parent
+images_dir = PROJECT_ROOT / "images"
 images_dir.mkdir(exist_ok=True)
 door = Button(17, pull_up=True)
 motion = MotionSensor(22)
