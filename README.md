@@ -42,12 +42,12 @@ THEN
 - Purchase required hardware
 - Test individual hardware components
 
-### 2. Development -> In progress
+### 2. Development -> Done
 - Implement sensor input handling
 - Integrate camera capture
 - Integrate WhatsApp notifications using Twilio
 
-### 3. Testing
+### 3. Testing -> In  Progress
 - Test full workflow using physical hardware
 - Validate notification and image capture behavior
 
