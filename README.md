@@ -8,17 +8,28 @@ The system is designed to detect potential unauthorized entry and notify staff i
 ## Intended Users
 All department employees.
 
-## Technology Stack
+## Tech Stack
 
-**Hardware:** Raspberry Pi
+**Hardware:** 
+- Raspberry Pi
+- CSI Camera Module
+- Motion Sensor (GPIO)
+- Door Latch Sensor (GPIO)
 
-**Software:** Python
+**Software:**
+- Python
+- Raspberry Pi OS
+- gpiozero (GPIO handling)
+- rpicam (image capture)
+- requests / twilio-python (HTTP + WhatsApp messaging)
 
-**Integrations:**
-- Camera module (CSI)
-- Motion sensor (GPIO)
-- Door latch sensor (GPIO)
-- Twilio API (WhatsApp notifications)
+**Cloud & Integrations:**
+- Supabase Storage
+  - Stores captured images
+  - Provides public URLs for images
+- Twilio API
+  - Provides public URLs for images
+  - Sends WhatsApp notifications
 
 ## System Logic / Workflow
 
@@ -42,12 +53,12 @@ THEN
 - Purchase required hardware
 - Test individual hardware components
 
-### 2. Development -> In progress
+### 2. Development -> Done
 - Implement sensor input handling
 - Integrate camera capture
 - Integrate WhatsApp notifications using Twilio
 
-### 3. Testing
+### 3. Testing -> In  Progress
 - Test full workflow using physical hardware
 - Validate notification and image capture behavior
 
