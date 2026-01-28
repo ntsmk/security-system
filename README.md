@@ -67,6 +67,9 @@ THEN
 - Perform final validation and tuning
 - Document usage and basic maintenance steps
 
+## Screenshot
+<img src="images/screenshot.jpg" alt="screenshot"/>
+
 ## Notes
 This project prioritizes simplicity, reliability, and maintainability over advanced features.
 
