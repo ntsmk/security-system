@@ -28,12 +28,11 @@ motion = MotionSensor(22)
 
 
 def is_door_open():
-    # Return True if door sensor is NOT pressed (open circuit)
     return not door.is_pressed
 
 def is_motion():
-    # Return True if motion is NOT no motion
-    return not motion.when_no_motion
+    time.sleep(1)
+    return motion.motion_detected
 
 def capture_image():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
