@@ -68,6 +68,7 @@ THEN
 - Document usage and basic maintenance steps
 
 ## Screenshot
+Sample notification screenshot
 <img src="images/screenshot.jpg" alt="screenshot"/>
 
 ## Notes
