@@ -75,3 +75,5 @@ THEN
 This project prioritizes simplicity, reliability, and maintainability over advanced features.
 
 Future enhancements (e.g., door unlock integration, logging, or cloud dashboards) can be added incrementally if needed.
+
+Also consider connecting RPi to cloud platforms (AWS IoT Greengrass, Azure IoT Edge, Google Edge TPU) to build hybrid edge-cloud systems.
