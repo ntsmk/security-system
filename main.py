@@ -152,19 +152,24 @@ def send_whatsapp_message(public_url):
         print(f"Failed to send message after retry. Error:{e}")  # print error reason
 
 if __name__ == "__main__":
-    while True:
+     while True:
         if is_active_time():
             if is_door_open() or is_motion():
-                image_path = capture_image()
-                public_url, file_name = upload_image(image_path, bucket_name)
+                try:
+                    image_path = capture_image()
+                    public_url, file_name = upload_image(image_path, bucket_name)
 
-                time.sleep(3) # Let Supabase settle
-                send_whatsapp_message(public_url)
+                    if public_url: # if uploading image to Supabase success 
+                        send_whatsapp_message(public_url)
+                        time.sleep(20) # Wait for Twilio to fetch the image
+                        delete_image(bucket_name, file_name, image_path)
+                    else:# if uploading image to Supabase failed
+                        print("Skipping deleting Supabase deleting because upload failed.")
+                        if os.path.exists(image_path): os.remove(image_path)
 
-                time.sleep(20) # Wait for Twilio to fetch the image
-                delete_image(bucket_name, file_name, image_path)
-
+                except Exception as e:
+                    print(f"Critical error happened: {e}")
+                    
                 time.sleep(10)  # Small delay to avoid busy looping
         else:
-            # Sleep longer when inactive to save CPU
-            time.sleep(60)
+            time.sleep(60) # Sleep longer when inactive to save CPU
