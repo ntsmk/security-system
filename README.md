@@ -45,6 +45,10 @@ THEN
 ## Architecture diagram
 <img src="images/diagram.jpg" alt="diagram"/>
 
+## Screenshot
+- Sample notification screenshot
+<img src="images/screenshot.jpg" alt="screenshot"/>
+
 ## Project Tasks (Execution Order)
 
 ### 1. Define Requirements -> Done
@@ -66,10 +70,6 @@ THEN
 - Install system in the office environment
 - Perform final validation and tuning
 - Document usage and basic maintenance steps
-
-## Screenshot
-- Sample notification screenshot
-<img src="images/screenshot.jpg" alt="screenshot"/>
 
 ## Notes
 This project prioritizes simplicity, reliability, and maintainability over advanced features.
