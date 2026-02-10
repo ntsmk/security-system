@@ -49,28 +49,6 @@ THEN
 - Sample notification screenshot
 <img src="images/screenshot.jpg" alt="screenshot"/>
 
-## Project Tasks (Execution Order)
-
-### 1. Define Requirements -> Done
-- Identify hardware and software requirements
-- Research compatible components
-- Purchase required hardware
-- Test individual hardware components
-
-### 2. Development -> Done
-- Implement sensor input handling
-- Integrate camera capture
-- Integrate WhatsApp notifications using Twilio
-
-### 3. Testing -> In  Progress
-- Test full workflow using physical hardware
-- Validate notification and image capture behavior
-
-### 4. Deployment
-- Install system in the office environment
-- Perform final validation and tuning
-- Document usage and basic maintenance steps
-
 ## Notes
 This project prioritizes simplicity, reliability, and maintainability over advanced features.
 
