@@ -11,8 +11,16 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from twilio.http.http_client import TwilioHttpClient
+import sys
+import logging
+from logging.handlers import RotatingFileHandler
 
 load_dotenv()
+
+door = Button(17, pull_up=True)
+motion = MotionSensor(22)
+
+PROJECT_ROOT = Path(__file__).parent
 
 url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_SERVICE_KEY")
@@ -23,6 +31,8 @@ tw_account_id = os.getenv("account_sid")
 tw_auth_token = os.getenv("auth_token")
 tw_from_number = os.getenv("from_number")
 tw_to_number = os.getenv("to_number")
+
+# Configure retry logic
 # 1. Define your retry strategy
 retry_strategy = Retry(
     total=5,
@@ -42,11 +52,28 @@ custom_http_client = TwilioHttpClient(session=session, timeout=10)
 # 4 adding it to creating client
 twilio = Client(tw_account_id, tw_auth_token, http_client=custom_http_client)
 
-PROJECT_ROOT = Path(__file__).parent
+# Configure images dir
 images_dir = PROJECT_ROOT / "images"
-images_dir.mkdir(exist_ok=True)
-door = Button(17, pull_up=True)
-motion = MotionSensor(22)
+images_dir.mkdir(exist_ok=True) # creates folders if not exist
+
+# Define the log directory
+logs_dir = PROJECT_ROOT / "logs"
+logs_dir.mkdir(exist_ok=True) # creates folders if not exist
+log_file = logs_dir / f"security_system.log"
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        RotatingFileHandler(
+            log_file,
+            maxBytes=2*1024*1024,
+            backupCount=10
+        ),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 def is_active_time():
     """
@@ -85,8 +112,9 @@ def capture_image():
             ["rpicam-still", "-o", str(image_path)],
             check=True
         )
+        logging.info(f"Image captured successfuly: {image_path}")
     except Exception as e:
-        print(f"Failed to capture image: {e}")
+        logging.error(f"Failed to capture image: {e}")
 
     return image_path
 
@@ -111,10 +139,10 @@ def upload_image(image_path, bucket_name):
 
         # Get public URL
         public_url = supabase.storage.from_(bucket_name).get_public_url(file_name)
-
+        logging.info(f"Uploaded image: {file_name}")
         return public_url, file_name
     except Exception as e:
-        print(f"Failed to upload image on supabase: {e}")
+        logging.error(f"Failed to upload image on supabase: {e}")
         return None, None
 
 def delete_image(bucket_name, file_name, image_path):
@@ -123,16 +151,16 @@ def delete_image(bucket_name, file_name, image_path):
     """
     try:
         supabase.storage.from_(bucket_name).remove([file_name])
-        print(f"Removed from Supabase: {file_name}")  # delete from supabase bucket
+        logging.info(f"Removed from Supabase: {file_name}")
     except Exception as e:
-        print(f"Failed to delete image {file_name} on supabase: {e}")
+        logging.error(f"Failed to delete image {file_name} on supabase: {e}")
 
     try:
         if os.path.exists(image_path):
             os.remove(image_path)  # delete from local SD card
-            print(f"Deleted local file: {image_path}")
+            logging.info(f"Deleted local file: {image_path}")
     except Exception as e:
-        print(f"Local deletion failed for {image_path}:{e}")
+        logging.error(f"Local deletion failed for {image_path}:{e}")
 
 def send_whatsapp_message(public_url):
     """
@@ -146,10 +174,10 @@ def send_whatsapp_message(public_url):
             body="Motion detected!",
             media_url=[public_url]
         )
-        print("Sent whatsapp message")
+        logging.info("Sent whatsapp message")
 
-    except Exception as e:  # modified how to state the error. The previous one might not work for Twilio 9.x
-        print(f"Failed to send message after retry. Error:{e}")  # print error reason
+    except Exception as e:
+        logging.error(f"Failed to send message after retry. Error:{e}")
 
 if __name__ == "__main__":
      while True:
@@ -164,11 +192,13 @@ if __name__ == "__main__":
                         time.sleep(20) # Wait for Twilio to fetch the image
                         delete_image(bucket_name, file_name, image_path)
                     else:# if uploading image to Supabase failed
-                        print("Skipping deleting Supabase deleting because upload failed.")
-                        if os.path.exists(image_path): os.remove(image_path)
+                        logging.warning("Skipping deleting Supabase deleting because upload failed.")
+                        if os.path.exists(image_path):
+                            os.remove(image_path)
+                            logging.info("Cleaned up local file")
 
                 except Exception as e:
-                    print(f"Critical error happened: {e}")
+                    logging.exception(f"Critical error happened: {e}")
                     
                 time.sleep(10)  # Small delay to avoid busy looping
         else:
