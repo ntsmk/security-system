@@ -47,18 +47,19 @@ adapter = HTTPAdapter(max_retries=retry_strategy)
 session.mount("https://", adapter)
 
 # 3. Inject this session into Twilio's HttpClient
-custom_http_client = TwilioHttpClient(session=session, timeout=10)
+custom_http_client = TwilioHttpClient(timeout=10)
+custom_http_client.session = session
 
 # 4 adding it to creating client
 twilio = Client(tw_account_id, tw_auth_token, http_client=custom_http_client)
 
 # Configure images dir
 images_dir = PROJECT_ROOT / "images"
-images_dir.mkdir(exist_ok=True) # creates folders if not exist
+images_dir.mkdir(exist_ok=True)  # creates folders if not exist
 
 # Define the log directory
 logs_dir = PROJECT_ROOT / "logs"
-logs_dir.mkdir(exist_ok=True) # creates folders if not exist
+logs_dir.mkdir(exist_ok=True)  # creates folders if not exist
 log_file = logs_dir / f"security_system.log"
 
 # Configure logging
@@ -68,12 +69,13 @@ logging.basicConfig(
     handlers=[
         RotatingFileHandler(
             log_file,
-            maxBytes=2*1024*1024,
+            maxBytes=2 * 1024 * 1024,
             backupCount=10
         ),
         logging.StreamHandler(sys.stdout)
     ]
 )
+
 
 def is_active_time():
     """
@@ -81,11 +83,11 @@ def is_active_time():
     """
     now = datetime.now().time()
 
-    start = dtime(18, 0)  # 6:00 PM
-    end = dtime(8, 0)     # 8:00 AM
+    start = dtime(17, 20)
+    end = dtime(17, 50)
 
-    # Time window crosses midnight
-    return now >= start or now <= end # catches time > 1800 (1801-2359) or time < 0800 (0000-0759)
+    return start <= now <= end
+
 
 def is_door_open():
     """
@@ -93,12 +95,14 @@ def is_door_open():
     """
     return not door.is_pressed
 
+
 def is_motion():
     """
     :return: if motion is detected, return True
     """
     time.sleep(1)
     return motion.motion_detected
+
 
 def capture_image():
     """
@@ -117,6 +121,7 @@ def capture_image():
         logging.error(f"Failed to capture image: {e}")
 
     return image_path
+
 
 def upload_image(image_path, bucket_name):
     """
@@ -145,6 +150,7 @@ def upload_image(image_path, bucket_name):
         logging.error(f"Failed to upload image on supabase: {e}")
         return None, None
 
+
 def delete_image(bucket_name, file_name, image_path):
     """
     Cleaning up the pic data on the bucket as the bucket has limit. Also delete from local SD card
@@ -161,6 +167,7 @@ def delete_image(bucket_name, file_name, image_path):
             logging.info(f"Deleted local file: {image_path}")
     except Exception as e:
         logging.error(f"Local deletion failed for {image_path}:{e}")
+
 
 def send_whatsapp_message(public_url):
     """
@@ -179,19 +186,20 @@ def send_whatsapp_message(public_url):
     except Exception as e:
         logging.error(f"Failed to send message after retry. Error:{e}")
 
+
 if __name__ == "__main__":
-     while True:
+    while True:
         if is_active_time():
             if is_door_open() or is_motion():
                 try:
                     image_path = capture_image()
                     public_url, file_name = upload_image(image_path, bucket_name)
 
-                    if public_url: # if uploading image to Supabase success 
+                    if public_url:  # if uploading image to Supabase success
                         send_whatsapp_message(public_url)
-                        time.sleep(20) # Wait for Twilio to fetch the image
+                        time.sleep(20)  # Wait for Twilio to fetch the image
                         delete_image(bucket_name, file_name, image_path)
-                    else:# if uploading image to Supabase failed
+                    else:  # if uploading image to Supabase failed
                         logging.warning("Skipping deleting Supabase deleting because upload failed.")
                         if os.path.exists(image_path):
                             os.remove(image_path)
@@ -199,7 +207,7 @@ if __name__ == "__main__":
 
                 except Exception as e:
                     logging.exception(f"Critical error happened: {e}")
-                    
+
                 time.sleep(10)  # Small delay to avoid busy looping
         else:
-            time.sleep(60) # Sleep longer when inactive to save CPU
+            time.sleep(60)  # Sleep longer when inactive to save CPU
