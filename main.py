@@ -83,10 +83,10 @@ def is_active_time():
     """
     now = datetime.now().time()
 
-    start = dtime(17, 20)
-    end = dtime(17, 50)
+    start = dtime(18, 0)
+    end = dtime(8, 0)
 
-    return start <= now <= end
+    return now >= start or now <= end
 
 
 def is_door_open():
