@@ -45,6 +45,7 @@ THEN
 
 ## Deployment 
 To ensure the system remains active 24/7 without a manual terminal session, it is configured as a systemd service.
+
 The service unit file is located at `/etc/systemd/system/security.service`. It handles automatic startup on boot and crash recovery.
 
 ## Architecture diagram
