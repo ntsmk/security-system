@@ -8,9 +8,6 @@ WorkingDirectory=/home/service/security_system
 
 ExecStart=/home/service/security_system/venv/bin/python3 main.py
 
-# --- THE SECRET INJECTION ---
-Environment="actual passwords here"
-
 # Restart logic
 Restart=always
 RestartSec=5
