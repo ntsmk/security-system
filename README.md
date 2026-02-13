@@ -19,6 +19,7 @@ All department employees.
 **Software:**
 - Python
 - Raspberry Pi OS
+- systemd (Orchestrates the background service and auto-recovery)
 - gpiozero (GPIO handling)
 - rpicam (image capture)
 - requests / twilio-python (HTTP + WhatsApp messaging)
@@ -41,6 +42,10 @@ THEN
     capture image
     send WhatsApp notification via Twilio
 ```
+
+## Deployment 
+To ensure the system remains active 24/7 without a manual terminal session, it is configured as a systemd service.
+The service unit file is located at `/etc/systemd/system/security.service`. It handles automatic startup on boot and crash recovery.
 
 ## Architecture diagram
 <img src="images/diagram.jpg" alt="diagram"/>
