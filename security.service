@@ -8,6 +8,12 @@ WorkingDirectory=/home/service/security_system
 
 ExecStart=/home/service/security_system/venv/bin/python3 main.py
 
+# --- Resource Limits (The "K8s" way) ---
+# Limits the process to 500MB of RAM
+MemoryMax=500M
+# Limits the process to 20% of a single CPU core
+CPUQuota=20%
+
 # Restart logic
 Restart=always
 RestartSec=5
