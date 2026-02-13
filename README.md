@@ -11,7 +11,7 @@ All department employees.
 ## Tech Stack
 
 **Hardware:** 
-- Raspberry Pi
+- Raspberry Pi 4, 2GB RAM, 32GB SD card storage
 - CSI Camera Module
 - Motion Sensor (GPIO)
 - Door Latch Sensor (GPIO)
@@ -47,6 +47,8 @@ THEN
 To ensure the system remains active 24/7 without a manual terminal session, it is configured as a systemd service.
 
 The service unit file is located at `/etc/systemd/system/security.service`. It handles automatic startup on boot and crash recovery.
+
+This project is built on Raspberry Pi OS (Linux) to leverage the extreme efficiency of the Linux Kernel. By operating "headless" (without a GUI) and using systemd for orchestration, we ensure that the maximum amount of hardware resources (RAM/CPU) is dedicated to security monitoring rather than operating system overhead. This makes the system viable even on low-spec "Thin Edge" hardware like the RPi4 2GB.
 
 ## Architecture diagram
 <img src="images/diagram.jpg" alt="diagram"/>
