@@ -4,7 +4,6 @@ from pathlib import Path
 from supabase import create_client
 from twilio.rest import Client
 import os
-from dotenv import load_dotenv
 import time
 from gpiozero import Button, MotionSensor
 import requests
@@ -14,8 +13,6 @@ from twilio.http.http_client import TwilioHttpClient
 import sys
 import logging
 from logging.handlers import RotatingFileHandler
-
-load_dotenv()
 
 door = Button(17, pull_up=True)
 motion = MotionSensor(22)

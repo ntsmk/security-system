@@ -1,0 +1,19 @@
+[Unit]
+Description=Security Project Service
+After=network.target
+
+[Service]
+User=service
+WorkingDirectory=/home/service/security_system
+
+ExecStart=/home/service/security_system/venv/bin/python3 main.py
+
+# --- THE SECRET INJECTION ---
+Environment="actual passwords here"
+
+# Restart logic
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
