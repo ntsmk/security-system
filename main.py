@@ -72,6 +72,27 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)
     ]
 )
+last_heartbeat_date = None
+def send_heartbeat():
+    """
+    Send message to tell you if the system is alive or not every day set time
+    """
+    global last_heartbeat_date
+    today = datetime.now().date()
+    now = datetime.now().time()
+
+    if now >= dtime(9,0) and last_heartbeat_date != today: # why >= instead of ==? becasue there is a lag
+        try:
+            twilio.messages.create(
+                from_=f"whatsapp:{tw_from_number}",
+                to=f"whatsapp:{tw_to_number}",
+                body="SYSTEM_ALIVE_OK"
+            )
+            logging.info("Sent daily heartbeat message")
+            last_heartbeat_date = today
+
+        except Exception as e:
+            logging.error(f"Failed to send heartbeat: {e}")
 
 
 def is_active_time():
@@ -186,6 +207,7 @@ def send_whatsapp_message(public_url):
 
 if __name__ == "__main__":
     while True:
+        send_heartbeat()
         if is_active_time():
             if is_door_open() or is_motion():
                 try:
