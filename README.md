@@ -56,10 +56,3 @@ This project is built on Raspberry Pi OS (Linux) to leverage the extreme efficie
 ## Screenshot
 - Sample notification screenshot
 <img src="images/screenshot.jpg" alt="screenshot"/>
-
-## Notes
-This project prioritizes simplicity, reliability, and maintainability over advanced features.
-
-Future enhancements (e.g., door unlock integration, logging, or cloud dashboards) can be added incrementally if needed.
-
-Also consider connecting RPi to cloud platforms (AWS IoT Greengrass, Azure IoT Edge, Google Edge TPU) to build hybrid edge-cloud systems.
