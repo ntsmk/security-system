@@ -72,6 +72,8 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)
     ]
 )
+
+# Configure heartbeat feature
 last_heartbeat_date = None
 def send_heartbeat():
     """
