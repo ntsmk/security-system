@@ -14,10 +14,10 @@ import sys
 import logging
 from logging.handlers import RotatingFileHandler
 
+PROJECT_ROOT = Path(__file__).parent
+
 door = Button(17, pull_up=True)
 motion = MotionSensor(22)
-
-PROJECT_ROOT = Path(__file__).parent
 
 url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_SERVICE_KEY")
@@ -81,7 +81,7 @@ def send_heartbeat():
     today = datetime.now().date()
     now = datetime.now().time()
 
-    if now >= dtime(9,0) and last_heartbeat_date != today: # why >= instead of ==? becasue there is a lag
+    if now >= dtime(9,0) and last_heartbeat_date != today:
         try:
             twilio.messages.create(
                 from_=f"whatsapp:{tw_from_number}",
