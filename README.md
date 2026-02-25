@@ -55,4 +55,7 @@ This project is built on Raspberry Pi OS (Linux) to leverage the extreme efficie
 
 ## Screenshot
 - Sample notification screenshot
-<img src="images/screenshot.jpg" alt="screenshot"/>
+<img src="images/office.jpg" alt="office"/>
+
+- How it is deployed in the office
+<img src="images/setting.jpg" alt="deployment"/>
